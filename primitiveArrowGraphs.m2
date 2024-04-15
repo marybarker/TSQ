@@ -3,13 +3,14 @@ needsPackage "NormalToricVarieties";
 needsPackage "Graphs";
 needsPackage "Polyhedra"
 
+-- this function checks if the object 'v' is in the list 'l'
 isIn = (v, l) -> (
     p := positions(l, x -> x == v);
     #p > 0
 )
 
+-- this function checks if two cones share a facet
 shareAFacet = (C1, C2) -> (
-
     for f1 in facesAsCones(1, C1) do (
         for f2 in facesAsCones(1, C2) do (
             if (f1 == f2) then (
@@ -25,7 +26,9 @@ chamberGraph = Q -> (
     ths := referenceThetas CQ;
     fps := apply(ths, x-> transpose matrix flowPolytope(x, Q));
 
+    -- smallerFs is the set of unique flow polytopes
     smallerFps := unique fps;
+    -- smallerIs is the indices of smallerFs considered as a subset of fps
     smallerIs := apply(smallerFps, x -> first positions(fps, y -> y == x));
     print("here are the indices", smallerIs);
 
@@ -56,6 +59,7 @@ chamberGraph = Q -> (
     return {verts, edges, max(nvs) - min(nvs)};
 )
 
+-- list all possible graphs (up to multiplicity of non-primitive arrows) that have 3 primitive arrows
 ThreePrimitiveArrowQuivers := {
     --{{0,1},{0,2},{0,3}},
     --{{1,0},{2,0},{3,0}},
@@ -84,6 +88,7 @@ ThreePrimitiveArrowQuivers := {
     {{0,1},{2,0},{3,0},{3,1},{2,1}}
 };
 
+-- compute results for all 3-primitive arrows graphs
 fname = "threePrimitiveArrows";
 for Q in ThreePrimitiveArrowQuivers do(
     TQ := toricQuiver(Q);
